@@ -1,7 +1,8 @@
 package divaeva.hw.pageObjects;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,59 +17,29 @@ public class FiltersPage extends BasePage {
     private static final By OK_BUTTON = By.xpath("//button[@class='filter-price__range-btn btn btn--graphite'][1]");
     private static final By ONE_PAGE_PRODUCTS_PRICES = By.className("price__value");
     private static final By COMPUTER_TABLE_LINK = By.xpath("//a[@href='/ua/dom-ofisnye-i-kompyuternye-stoly/ikea-utespelare-80507627/'] ");
-    private static final By OUT_OF_FILTER_PRICE_BOUND_PRODUCT = By.xpath("//*[contains(text(), 'Cougar Royal 150 White')]");
-    private static final By RESULT_SEARCH_FIELD = By.xpath("//div[@aria-owns='autosuggest-autosuggest__results']");
-    private static final By RESULT_SEARCH_TITLE = By.xpath("//div[@class='search__title']");
 
     public FiltersPage(WebDriver driver) {
         super(driver);
     }
 
-    public void setUpperPriceToFilterWithRetry(Integer upperPrice, int retryMax, By locator) {
-        for (int i = 0; i < retryMax; i++) {
-            try {
-                System.out.println("Retry attempt for setting upper price in filter: " + i);
-                WebElement maxPriceInput = waitUntilElementVisibility(INPUT_MAX_PRICE);
-                maxPriceInput.clear();
-                maxPriceInput.sendKeys(upperPrice.toString());
-                return;
-            } catch (StaleElementReferenceException ex) {
-                System.out.println("Retry failed for setting upper price in filter: " + i);
-            }
-        }
-        throw new RuntimeException("Cannot find element: " + locator);
+    @Step("Set upper price to filter with retry")
+    public void setUpperPriceToFilterWithRetry(Integer upperPrice) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
+        WebElement maxPriceInput = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_MAX_PRICE));
+        maxPriceInput.clear();
+        maxPriceInput.sendKeys(upperPrice.toString());
     }
 
-    public List<String> getElementsTextWithRetry(By locator, int retryMax) {
-        for (int i = 0; i < retryMax; i++) {
-            try {
-                System.out.println("Retry attempt for getting element's text: " + i);
-                List<WebElement> foundProducts = getDriver().findElements(locator);
-                List<String> elementsText = new ArrayList<>();
-                for (WebElement element : foundProducts) {
-                    elementsText.add(element.getText());
-                }
-                return elementsText;
-            } catch (StaleElementReferenceException ex) {
-                System.out.println("Retry failed for getting element's text: " + i);
-            }
-        }
-        throw new RuntimeException("Cannot find element: " + locator);
-    }
-
+    @Step("Click on Ok button")
     public void clickOnOkButton() {
-        waitUntilElementVisibility(OK_BUTTON).click();
-        waitForItemOutOfFiltersValueBound();
-    }
+        List<WebElement> pricesBeforeRedrawn = getDriver().findElements(By.xpath("//div[@class='list-item list-item--row']"));
 
-    private void waitForItemOutOfFiltersValueBound() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
-        WebElement element = getDriver().findElement(OUT_OF_FILTER_PRICE_BOUND_PRODUCT);
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(element, "Cougar Royal 150 White")));
+        waitUntilElementVisibility(OK_BUTTON).click();
+        waitForElementsRedrawn(pricesBeforeRedrawn);
     }
 
     public List<Integer> getPrices() {
-        List<String> prices = getElementsTextWithRetry(ONE_PAGE_PRODUCTS_PRICES, 10);
+        List<String> prices = getElementsText(ONE_PAGE_PRODUCTS_PRICES);
         List<Integer> parsedPrices = new ArrayList<>();
         for (String actualPrice : prices) {
             parsedPrices.add(new Integer(actualPrice.replaceAll(" ", "")));
@@ -76,15 +47,30 @@ public class FiltersPage extends BasePage {
         return parsedPrices;
     }
 
+    @Step("Click on computer table link ")
     public void clickOnComputerTableLink() {
         waitUntilElementVisibility(COMPUTER_TABLE_LINK).click();
     }
 
-    public String getSearchResultField() {
-        return waitUntilElementVisibility(RESULT_SEARCH_FIELD).getText();
+    private void waitForElementsRedrawn(List<WebElement> elements) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(1));
+        while (true) {
+            for (WebElement oldElement : elements) {
+                try {
+                    wait.until(ExpectedConditions.stalenessOf(oldElement));
+                    return;
+                } catch (TimeoutException ignored) {
+                }
+            }
+        }
     }
 
-    public String getSearchResultTitle() {
-        return waitUntilElementVisibility(RESULT_SEARCH_TITLE).getText();
+    private List<String> getElementsText(By locator) {
+        List<WebElement> foundProducts = getDriver().findElements(locator);
+        List<String> elementsText = new ArrayList<>();
+        for (WebElement element : foundProducts) {
+            elementsText.add(element.getText());
+        }
+        return elementsText;
     }
 }

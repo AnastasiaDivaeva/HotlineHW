@@ -1,8 +1,8 @@
 package divaeva.hw.pageObjects;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -32,11 +32,17 @@ public class ShopPage extends BasePage {
         }
     }
 
+    @Step("Click on buy button")
     public void clickOnBuyButton() {
         waitUntilElementToBeClickable(marketSiteDriver, BUY_BUTTON).click();
     }
 
-    public WebElement findOrderConfirmation() {
-        return waitUntilElementVisibility(PLACE_ORDER_BUTTON);
+    public boolean isOrderConfirmationFound() {
+        try {
+            waitUntilElementVisibility(PLACE_ORDER_BUTTON);
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException ex) {
+            return false;
+        }
     }
 }

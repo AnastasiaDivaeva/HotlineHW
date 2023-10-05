@@ -1,13 +1,13 @@
 package divaeva.hw.pageObjects;
 
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class ShopPageTest extends BaseTest {
 
-    @Test
+    @Test(description = "Checking addition product to the cart")
+    @Description("Test description: verify adding product to the cart")
     public void checkingAdditionProductToTheCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.clickOnComputerTableButton();
@@ -17,11 +17,6 @@ public class ShopPageTest extends BaseTest {
         detailPage.clickOnTheBuyProductButton();
         ShopPage shopPage = new ShopPage(getDriver());
         shopPage.clickOnBuyButton();
-        try {
-            WebElement placeOrderButton = shopPage.findOrderConfirmation();
-            Assert.assertTrue(placeOrderButton.isDisplayed());
-        } catch (NoSuchElementException e) {
-            Assert.fail();
-        }
+        Assert.assertTrue(shopPage.isOrderConfirmationFound());
     }
 }

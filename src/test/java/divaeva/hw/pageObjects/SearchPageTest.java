@@ -1,12 +1,10 @@
 package divaeva.hw.pageObjects;
 
-import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class SearchPageTest extends BaseTest {
-    @Test(description = "Compare search results")
-    @Description("Test description: verify search result")
+    @Test()
     public void compareSearchResults() {
         String input = "клавіатура";
         HomePage homePage = new HomePage(getDriver());

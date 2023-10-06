@@ -10,9 +10,11 @@ import java.time.Duration;
 
 public class BasePage {
     private WebDriver driver;
+    protected WebDriverWait wait;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     public WebElement waitUntilElementToBeClickable(WebDriver driver, By element) {
@@ -21,7 +23,6 @@ public class BasePage {
     }
 
     public WebElement waitUntilElementVisibility(By element) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 

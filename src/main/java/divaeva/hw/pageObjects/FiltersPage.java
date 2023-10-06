@@ -1,6 +1,5 @@
 package divaeva.hw.pageObjects;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -18,11 +17,11 @@ public class FiltersPage extends BasePage {
     private static final By ONE_PAGE_PRODUCTS_PRICES = By.className("price__value");
     private static final By COMPUTER_TABLE_LINK = By.xpath("//a[@href='/ua/dom-ofisnye-i-kompyuternye-stoly/ikea-utespelare-80507627/'] ");
 
+   private static final By PRICE_BEFORE_REDRAWN=By.xpath("//div[@class='list-item list-item--row']");
     public FiltersPage(WebDriver driver) {
         super(driver);
     }
 
-    @Step("Set upper price to filter with retry")
     public void setUpperPriceToFilterWithRetry(Integer upperPrice) {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(30));
         WebElement maxPriceInput = wait.until(ExpectedConditions.visibilityOfElementLocated(INPUT_MAX_PRICE));
@@ -30,9 +29,8 @@ public class FiltersPage extends BasePage {
         maxPriceInput.sendKeys(upperPrice.toString());
     }
 
-    @Step("Click on Ok button")
     public void clickOnOkButton() {
-        List<WebElement> pricesBeforeRedrawn = getDriver().findElements(By.xpath("//div[@class='list-item list-item--row']"));
+        List<WebElement> pricesBeforeRedrawn = getDriver().findElements(PRICE_BEFORE_REDRAWN);
 
         waitUntilElementVisibility(OK_BUTTON).click();
         waitForElementsRedrawn(pricesBeforeRedrawn);
@@ -47,7 +45,6 @@ public class FiltersPage extends BasePage {
         return parsedPrices;
     }
 
-    @Step("Click on computer table link ")
     public void clickOnComputerTableLink() {
         waitUntilElementVisibility(COMPUTER_TABLE_LINK).click();
     }

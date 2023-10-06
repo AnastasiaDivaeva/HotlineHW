@@ -1,13 +1,11 @@
 package divaeva.hw.pageObjects;
 
-import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class ShopPageTest extends BaseTest {
 
-    @Test(description = "Checking addition product to the cart")
-    @Description("Test description: verify adding product to the cart")
+    @Test()
     public void checkingAdditionProductToTheCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.clickOnComputerTableButton();

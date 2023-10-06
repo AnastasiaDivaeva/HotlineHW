@@ -1,6 +1,5 @@
 package divaeva.hw.pageObjects;
 
-import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -17,9 +16,7 @@ public class FiltersPageTest extends BaseTest {
                 {9000, 9000},
         };
     }
-
     @Test(dataProvider = "searchMaxPrice")
-    @Description("Test description: verify price filter")
     public void checkPriceFilter(Integer upperPrice, Integer expectedValue) {
         HomePage homePage = new HomePage(getDriver());
         homePage.clickOnComputerTableButton();

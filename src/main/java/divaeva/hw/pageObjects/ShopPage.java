@@ -1,6 +1,5 @@
 package divaeva.hw.pageObjects;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -32,7 +31,6 @@ public class ShopPage extends BasePage {
         }
     }
 
-    @Step("Click on buy button")
     public void clickOnBuyButton() {
         waitUntilElementToBeClickable(marketSiteDriver, BUY_BUTTON).click();
     }

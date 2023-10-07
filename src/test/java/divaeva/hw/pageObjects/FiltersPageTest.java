@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-//@Listeners(io.qameta.allure.testng.AllureTestNg.class)
 @Listeners(TestListener.class)
 public class FiltersPageTest extends BaseTest {
 

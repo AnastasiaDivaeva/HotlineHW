@@ -1,11 +1,15 @@
 package divaeva.hw.pageObjects;
 
+import io.qameta.allure.Description;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-public class DetailPageTest extends BaseTest {
+@Listeners(TestListener.class)
+public class ProductDetailsPage extends BaseTest {
 
-    @Test
+    @Test(description = "Check product information present")
+    @Description("Test description: verify that product information is present ")
     public void checkProductInformationPresent() {
         HomePage homePage = new HomePage(getDriver());
         homePage.clickOnComputerTableButton();

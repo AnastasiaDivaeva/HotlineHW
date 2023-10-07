@@ -15,15 +15,15 @@ public class DetailPage extends BasePage {
 
     public void clickOnProductDetailsSection() {
         getDriver().findElement(PRODUCT_BUTTON).click();
-        waitUntilElementVisibility(ABOUT_PRODUCT_BUTTON).click();
+        findElementWithVisibilityWaiter(ABOUT_PRODUCT_BUTTON).click();
     }
 
     public String getCharacteristicSectionTitle() {
-        return waitUntilElementVisibility(TITLE_CHARACTERISTIC).getText();
+        return findElementWithVisibilityWaiter(TITLE_CHARACTERISTIC).getText();
     }
 
     public void clickOnTheBuyProductButton() {
-        waitUntilElementVisibility(BUY_BUTTON).click();
+        findElementWithVisibilityWaiter(BUY_BUTTON).click();
     }
 
 }

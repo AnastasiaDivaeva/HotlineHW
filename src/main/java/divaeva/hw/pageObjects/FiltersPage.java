@@ -32,7 +32,7 @@ public class FiltersPage extends BasePage {
     public void clickOnOkButton() {
         List<WebElement> pricesBeforeRedrawn = getDriver().findElements(PRICE_BEFORE_REDRAWN);
 
-        waitUntilElementVisibility(OK_BUTTON).click();
+        findElementWithVisibilityWaiter(OK_BUTTON).click();
         waitForElementsRedrawn(pricesBeforeRedrawn);
     }
 
@@ -40,13 +40,13 @@ public class FiltersPage extends BasePage {
         List<String> prices = getElementsText(ONE_PAGE_PRODUCTS_PRICES);
         List<Integer> parsedPrices = new ArrayList<>();
         for (String actualPrice : prices) {
-            parsedPrices.add(new Integer(actualPrice.replaceAll(" ", "")));
+            parsedPrices.add(Integer.parseInt(actualPrice.replaceAll(" ", "")));
         }
         return parsedPrices;
     }
 
     public void clickOnComputerTableLink() {
-        waitUntilElementVisibility(COMPUTER_TABLE_LINK).click();
+        findElementWithVisibilityWaiter(COMPUTER_TABLE_LINK).click();
     }
 
     private void waitForElementsRedrawn(List<WebElement> elements) {

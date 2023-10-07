@@ -11,6 +11,6 @@ public class SearchPage extends BasePage {
     }
 
     public String getSearchResultTitle() {
-        return waitUntilElementVisibility(RESULT_SEARCH_TITLE).getText();
+        return findElementWithVisibilityWaiter(RESULT_SEARCH_TITLE).getText();
     }
 }
